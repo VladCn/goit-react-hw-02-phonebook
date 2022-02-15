@@ -63,5 +63,7 @@ export function Phonebook({
 Phonebook.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
+  handleChangePhone: PropTypes.func,
   name: PropTypes.string,
+  number: PropTypes.string,
 };

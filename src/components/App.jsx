@@ -6,8 +6,16 @@ import { Phonebook } from "./Phonebook";
 export class App extends React.Component {
   state = {
     contacts: [],
+    filter: "",
     name: "",
     number: "",
+  };
+
+  handleFilterContact = (event) => {
+    event.preventDefault();
+    this.setState({
+      filter: event.currentTarget.value,
+    });
   };
 
   handleChange = (event) => {
@@ -45,6 +53,10 @@ export class App extends React.Component {
   };
 
   render() {
+    const filteredContacts = this.state.contacts.filter((item) => {
+      return item.name.includes(this.state.filter);
+    });
+    console.log(filteredContacts);
     return (
       <div
         style={{
@@ -69,7 +81,11 @@ export class App extends React.Component {
           handleChangePhone={this.handleChangePhone}
         />
 
-        <ContactList contacts={this.state.contacts} />
+        <ContactList
+          contacts={filteredContacts}
+          onFilterContact={this.handleFilterContact}
+          filter={this.state.filter}
+        />
       </div>
     );
   }
