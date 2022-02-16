@@ -2,13 +2,21 @@ import React from "react";
 import shortid from "shortid";
 import { ContactList } from "./ContactList";
 import { Phonebook } from "./Phonebook";
+import { ContactRender } from "./ContactRender";
 
 export class App extends React.Component {
   state = {
     contacts: [],
     filter: "",
-    name: "",
-    number: "",
+  };
+
+  handleDelete = (event) => {
+    console.log(event.target.value);
+    this.setState((prev) => ({
+      contacts: prev.contacts.filter(
+        (value) => value.id !== event.target.value
+      ),
+    }));
   };
 
   handleFilterContact = (event) => {
@@ -18,43 +26,32 @@ export class App extends React.Component {
     });
   };
 
-  handleChange = (event) => {
-    console.log(event.currentTarget.value);
-    this.setState({
-      name: event.currentTarget.value,
-    });
-  };
-
-  handleChangePhone = (event) => {
-    console.log(event.currentTarget.value);
-    this.setState({
-      number: event.currentTarget.value,
-    });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(this.props);
-    console.log(`Signed up as: ${this.state.name}`);
+  handleSubmit = (data) => {
     this.setState((prev) => {
-      return {
-        contacts: [
-          ...prev.contacts,
-          {
-            name: this.state.name,
-            number: this.state.number,
-            id: shortid.generate(),
-          },
-        ],
-        name: "",
-        number: "",
-      };
+      const res = prev.contacts.map((item) => {
+        return item.name;
+      });
+
+      if (res.includes(data.name)) {
+        return alert(`${data.name} is already in contacts`);
+      } else {
+        return {
+          contacts: [
+            ...prev.contacts,
+            {
+              name: data.name,
+              number: data.number,
+              id: shortid.generate(),
+            },
+          ],
+        };
+      }
     });
   };
 
   render() {
     const filteredContacts = this.state.contacts.filter((item) => {
-      return item.name.includes(this.state.filter);
+      return item?.name?.includes(this.state.filter);
     });
     console.log(filteredContacts);
     return (
@@ -72,19 +69,17 @@ export class App extends React.Component {
         }}
       >
         <h2>Phonebook</h2>
-        <Phonebook
-          state={this.state}
-          handleSubmit={this.handleSubmit}
-          name={this.state.name}
-          number={this.state.number}
-          handleChange={this.handleChange}
-          handleChangePhone={this.handleChangePhone}
-        />
+        <Phonebook onSubmit={this.handleSubmit} />
 
         <ContactList
           contacts={filteredContacts}
           onFilterContact={this.handleFilterContact}
           filter={this.state.filter}
+        />
+
+        <ContactRender
+          contacts={filteredContacts}
+          handleDelete={this.handleDelete}
         />
       </div>
     );

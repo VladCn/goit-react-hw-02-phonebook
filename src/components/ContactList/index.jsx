@@ -1,7 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-export function ContactList({ contacts, filter, onFilterContact }) {
+export function ContactList({ filter, onFilterContact }) {
   console.log(filter);
 
   return (
@@ -9,7 +8,8 @@ export function ContactList({ contacts, filter, onFilterContact }) {
       <h2>Contacts</h2>
 
       <label>
-        <p>Find contacts by name</p>
+        Find contacts by name
+        <br />
         <input
           type="text"
           name="name"
@@ -18,18 +18,6 @@ export function ContactList({ contacts, filter, onFilterContact }) {
           onChange={onFilterContact}
         />
       </label>
-
-      <ul>
-        {contacts.map((item) => (
-          <li key={item.id}>
-            {item.name}: {item.number}
-          </li>
-        ))}
-      </ul>
     </>
   );
 }
-
-ContactList.propTypes = {
-  contacts: PropTypes.array,
-};
